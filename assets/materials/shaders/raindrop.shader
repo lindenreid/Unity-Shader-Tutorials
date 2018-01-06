@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Custom/Raindrops"
 {
 	Properties
@@ -69,7 +71,7 @@ Shader "Custom/Raindrops"
 				vertexOutput output;
 
 				// convert input to world space
-				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				output.pos = UnityObjectToClipPos(input.vertex);
 
                 // texture coordinates
 				output.texCoord = input.texCoord;

@@ -1,4 +1,4 @@
-Shader "Custom/CelWave"
+Shader "Custom/Grass"
 {
 	Properties
 	{
@@ -7,6 +7,7 @@ Shader "Custom/CelWave"
         _WaveSpeed("Wave Speed", float) = 1.0
         _WaveAmp("Wave Amp", float) = 1.0
         _HeightFactor("Height Factor", float) = 1.0
+		_HeightCutoff("Height Cutoff", float) = 1.2
         _NoiseTex("Wind Texture", 2D) = "white" {}
         _WorldSize("World Size", vector) = (1, 1, 1, 1)
         _WindSpeed("Wind Speed", vector) = (1, 1, 1, 1)
@@ -37,6 +38,7 @@ Shader "Custom/CelWave"
             float _WaveSpeed;
             float _WaveAmp;
             float _HeightFactor;
+			float _HeightCutoff;
             float4 _WindSpeed;
 
 			struct vertexInput
@@ -73,8 +75,10 @@ Shader "Custom/CelWave"
                 
 				//output.sp = samplePos; // test sample position
 
-                // dampen animation speed based on local height
-                float heightFactor = pow(input.vertex.y, _HeightFactor);
+                // 0 animation below _HeightCutoff
+                float heightFactor = (input.vertex.y > _HeightCutoff);
+				// make animation stronger with height
+				heightFactor = heightFactor * pow(input.vertex.y, _HeightFactor);
 
                 // apply wave animation
                 output.pos.z += sin(_WaveSpeed*noiseSample)*_WaveAmp * heightFactor;

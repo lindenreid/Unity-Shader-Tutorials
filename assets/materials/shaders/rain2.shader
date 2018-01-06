@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Custom/Rain2"
 {
 	Properties
@@ -92,7 +94,7 @@ Shader "Custom/Rain2"
 			vertexOutput vert(vertexInput input)
 			{
 				vertexOutput output;
-				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				output.pos = UnityObjectToClipPos(input.vertex);
 				output.texCoord = input.texCoord;
 				return output;
 			}
