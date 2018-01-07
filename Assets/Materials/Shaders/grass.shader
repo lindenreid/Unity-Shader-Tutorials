@@ -8,7 +8,7 @@ Shader "Custom/Grass"
         _WaveAmp("Wave Amp", float) = 1.0
         _HeightFactor("Height Factor", float) = 1.0
 		_HeightCutoff("Height Cutoff", float) = 1.2
-        _NoiseTex("Wind Texture", 2D) = "white" {}
+        _WindTex("Wind Texture", 2D) = "white" {}
         _WorldSize("World Size", vector) = (1, 1, 1, 1)
         _WindSpeed("Wind Speed", vector) = (1, 1, 1, 1)
 	}
@@ -30,8 +30,8 @@ Shader "Custom/Grass"
 			
 			// Properties
 			sampler2D _RampTex;
-            sampler2D _NoiseTex;
-            float4 _NoiseTex_ST;
+            sampler2D _WindTex;
+            float4 _WindTex_ST;
 			float4 _Color;
 			float4 _LightColor0; // provided by Unity
             float4 _WorldSize;
@@ -60,10 +60,9 @@ Shader "Custom/Grass"
 
 				// convert input to world space
 				output.pos = UnityObjectToClipPos(input.vertex);
-				float4 normal4 = float4(input.normal, 0.0); // need float4 to mult with 4x4 matrix
+				float4 normal4 = float4(input.normal, 0.0);
 				output.normal = normalize(mul(normal4, unity_WorldToObject).xyz);
 
-                // sample wind texture based on world position
                 // get vertex world position
                 float4 worldPos = mul(input.vertex, unity_ObjectToWorld);
                 // normalize position based on world size
@@ -71,18 +70,18 @@ Shader "Custom/Grass"
                 // scroll sample position based on time
                 samplePos += _Time.x * _WindSpeed.xy;
                 // sample wind texture
-                float noiseSample = tex2Dlod(_NoiseTex, float4(samplePos, 0, 0));
+                float windSample = tex2Dlod(_WindTex, float4(samplePos, 0, 0));
                 
 				//output.sp = samplePos; // test sample position
 
                 // 0 animation below _HeightCutoff
-                float heightFactor = (input.vertex.y > _HeightCutoff);
+                float heightFactor = input.vertex.y > _HeightCutoff;
 				// make animation stronger with height
 				heightFactor = heightFactor * pow(input.vertex.y, _HeightFactor);
 
                 // apply wave animation
-                output.pos.z += sin(_WaveSpeed*noiseSample)*_WaveAmp * heightFactor;
-                output.pos.x += cos(_WaveSpeed*noiseSample)*_WaveAmp * heightFactor;
+                output.pos.z += sin(_WaveSpeed*windSample)*_WaveAmp * heightFactor;
+                output.pos.x += cos(_WaveSpeed*windSample)*_WaveAmp * heightFactor;
 
 				return output;
 			}
