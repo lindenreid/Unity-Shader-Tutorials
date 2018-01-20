@@ -58,7 +58,7 @@ Shader "Custom/Grass"
 			{
 				vertexOutput output;
 
-				// convert input to world space
+				// convert input to clip & world space
 				output.pos = UnityObjectToClipPos(input.vertex);
 				float4 normal4 = float4(input.normal, 0.0);
 				output.normal = normalize(mul(normal4, unity_WorldToObject).xyz);
