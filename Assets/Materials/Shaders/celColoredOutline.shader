@@ -7,7 +7,6 @@
 		_Color("Color", Color) = (1, 1, 1, 1)
 		_OutlineExtrusion("Outline Extrusion", float) = 0
 		_OutlineColor("Outline Color", Color) = (0, 0, 0, 1)
-		_OutlineColorBalance("Outline Color Balance", Range(0.0, 1.0)) = 0.5
 	}
 
 	SubShader
@@ -151,7 +150,6 @@
 			uniform float4 _OutlineColor;
 			uniform float _OutlineSize;
 			uniform float _OutlineExtrusion;
-			uniform float _OutlineColorBalance;
 			sampler2D _MainTex;
 
 			struct vertexInput
@@ -188,7 +186,7 @@
 
 			float4 frag(vertexOutput input) : COLOR
 			{
-				float4 color = (1.0-_OutlineColorBalance)*input.color + _OutlineColorBalance*_OutlineColor;
+				float4 color = input.color * _OutlineColor;
 				return color;
 			}
 
