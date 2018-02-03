@@ -143,8 +143,7 @@
 			float4 frag(vertexOutput input) : COLOR
 			{
 				// apply depth texture
-				float4 s = UNITY_PROJ_COORD(input.screenPos); 
-				float4 depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, s);
+				float4 depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, input.screenPos);
 				float depth = LinearEyeDepth(depthSample).r;
 
 				// create foamline
