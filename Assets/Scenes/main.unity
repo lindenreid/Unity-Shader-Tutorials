@@ -8088,7 +8088,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7815becb176a4c949bae5b53b53e1fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: d66dff701e606264793d461d41e5064d, type: 2}
+  material: {fileID: 2100000, guid: 7e0135e393cbd104da8cbd91b46e59eb, type: 2}
 --- !u!1 &1029012943
 GameObject:
   m_ObjectHideFlags: 0
@@ -10938,7 +10938,7 @@ GameObject:
   - component: {fileID: 1459235691}
   - component: {fileID: 1459235692}
   m_Layer: 0
-  m_Name: Paint Stuff
+  m_Name: More PP Stuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

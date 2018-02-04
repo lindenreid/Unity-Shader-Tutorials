@@ -70,8 +70,9 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OutlineColorBalance: 0.837
-    - _OutlineExtrusion: 0.08
+    - _OutlineExtrusion: 0.05
     - _Parallax: 0.02
+    - _Radius: 10
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
