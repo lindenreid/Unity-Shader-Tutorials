@@ -180,14 +180,15 @@
 				output.pos = UnityObjectToClipPos(newPos);
 
 				output.color = tex2Dlod(_MainTex, float4(input.texCoord.xy, 0, 0));
+				output.color *= _OutlineColor;
 
 				return output;
 			}
 
 			float4 frag(vertexOutput input) : COLOR
 			{
-				float4 color = input.color * _OutlineColor;
-				return color;
+				//float4 color = input.color * _OutlineColor;
+				return input.color;
 			}
 
 			ENDCG
