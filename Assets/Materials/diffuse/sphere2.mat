@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: terrierDiffHigh
+  m_Name: sphere2
   m_Shader: {fileID: 4800000, guid: 9e317467a91f71447bc230b8f860002f, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -39,7 +39,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ca8f450fea9e11d448881dfeddd10ecc, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -55,36 +55,29 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AmbientIntensity: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Distortion: 0
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HighlightExtrusion: 0.0001
-    - _HighlightScale: 1
-    - _K: 2
+    - _HighlightExtrusion: 0
+    - _HighlightScale: 0
+    - _K: 1.31
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _P: 1.35
+    - _P: 3.13
     - _Parallax: 0.02
-    - _Power: 5.64
-    - _Scale: 5.43
-    - _Shininess: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _BrightColor: {r: 1, g: 0.9123732, b: 0.8014706, a: 1}
+    - _BrightColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DarkColor: {r: 0.11360076, g: 0.03211505, b: 0.19852942, a: 1}
-    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DarkColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HighlightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _LightColor: {r: 1, g: 0.9440162, b: 0.8235294, a: 1}
