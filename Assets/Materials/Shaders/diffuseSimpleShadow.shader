@@ -4,6 +4,10 @@ Shader "Custom/SimpleDiffuseShadow"
 	{
 		_MainTex("Texture", 2D) = "white" {}
 		_Color("Color", Color) = (1, 1, 1, 1)
+		_BrightColor("Light Color", Color) = (1, 1, 1, 1)
+        _DarkColor("Dark Color", Color) = (1, 1, 1, 1)
+        _K("Shadow Intensity", float) = 1.0
+        _P("Shadow Falloff",  float) = 1.0
 	}
 
 	SubShader
@@ -27,6 +31,10 @@ Shader "Custom/SimpleDiffuseShadow"
 			sampler2D _MainTex;
 			float4 _Color;
 			float4 _LightColor0; // provided by Unity
+			float4 _BrightColor;
+            float4 _DarkColor;
+            float _K;
+            float _P;
 
 			struct vertexInput
 			{
@@ -61,18 +69,25 @@ Shader "Custom/SimpleDiffuseShadow"
 				// _WorldSpaceLightPos0 provided by Unity
 				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 
-				// get angle between surface normal and light direction
-				float lightDot = saturate(dot(input.normal, lightDir));
+				// get dot product between surface normal and light direction
+				float lightDot = dot(input.normal, lightDir);
+                // do some math to make lighting falloff smooth
+                lightDot = exp(-pow(_K*(1 - lightDot), _P));
+
+                // lerp lighting between light & dark value
+                float3 light = lerp(_DarkColor, _BrightColor, lightDot);
 
 				// sample texture for color
 				float4 albedo = tex2D(_MainTex, input.texCoord.xy);
 
                 // shadow value
-                float attenuation = LIGHT_ATTENUATION(input); 
+                //float attenuation = LIGHT_ATTENUATION(input); 
 
-                float3 lighting = lightDot * _LightColor0.rgb * attenuation;
-                lighting += ShadeSH9(half4(input.normal,1));
-				float3 rgb = albedo.rgb * _Color.rgb * lighting;
+                // composite all lighting together
+                float3 lighting = light;
+                
+                // multiply albedo and lighting
+				float3 rgb = albedo.rgb * lighting;
 				return float4(rgb, 1.0);
 			}
 
