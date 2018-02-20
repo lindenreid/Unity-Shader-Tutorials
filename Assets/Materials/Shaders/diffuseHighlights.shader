@@ -90,7 +90,6 @@ Shader "Custom/DiffuseHighlights"
 			// Properties
 			sampler2D _MainTex;
             sampler2D _SpecRamp;
-            float4 _Color;
 			float4 _LightColor0; // provided by Unity
             float4 _BrightColor;
             float4 _DarkColor;

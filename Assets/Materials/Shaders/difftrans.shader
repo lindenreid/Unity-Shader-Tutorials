@@ -1,76 +1,16 @@
-Shader "Custom/DiffuseHighlights"
+Shader "Custom/DiffuseTut"
 {
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
-        _HighlightColor("Hightlight Color", Color) = (1, 1, 1, 1)
-        _HighlightExtrusion("Highlight Size", float) = 0.08
-        _HighlightScale("Highlight Scale", float) = -1
         _BrightColor("Light Color", Color) = (1, 1, 1, 1)
         _DarkColor("Dark Color", Color) = (1, 1, 1, 1)
-        _AmbientIntensity("Ambient Intensity", Range(0,1)) = 1.0
-        _Distortion("Scattering Distortion", Range(0,1)) = 0.5
-        _Power("Scattering Power", float) = 1.0
-        _Scale("Scattering Scale", float) = 1.0
+        _K("Shadow Intensity", float) = 1.0
+        _P("Shadow Falloff",  float) = 1.0
 	}
 
 	SubShader
 	{
-        // Outline pass
-        Pass
-        {
-            Cull Front 
-
-            CGPROGRAM
-            #pragma vertex vert
-			#pragma fragment frag
-
-			// Properties
-			uniform float4 _HighlightColor;
-			uniform float _HighlightExtrusion;
-            uniform float _HighlightScale;
-			sampler2D _MainTex;
-
-			struct vertexInput
-			{
-				float4 vertex : POSITION;
-				float3 normal : NORMAL;
-				float3 texCoord : TEXCOORD0;
-				float4 color : TEXCOORD1;
-			};
-
-			struct vertexOutput
-			{
-				float4 pos : SV_POSITION;
-				float4 color : TEXCOORD0;
-			};
-
-			vertexOutput vert(vertexInput input)
-			{
-				vertexOutput output;
-
-				float4 newPos = input.vertex;
-
-                // _WorldSpaceLightPos0 provided by Unity
-				float4 lightDir = normalize(_WorldSpaceLightPos0);
-
-				// normal extrusion technique
-				float3 normal = normalize(input.normal);
-				newPos += (float4(normal, 0.0) + lightDir*_HighlightScale) * _HighlightExtrusion;
-
-				// convert to world space
-				output.pos = UnityObjectToClipPos(newPos);
-
-				return output;
-			}
-
-			float4 frag(vertexOutput input) : COLOR
-			{
-				return _HighlightColor;
-			}
-            ENDCG
-        }
-
 		// Regular color & lighting pass
 		Pass
 		{
@@ -88,14 +28,13 @@ Shader "Custom/DiffuseHighlights"
 			
 			// Properties
 			sampler2D _MainTex;
+            sampler2D _SpecRamp;
             float4 _Color;
 			float4 _LightColor0; // provided by Unity
             float4 _BrightColor;
             float4 _DarkColor;
-            float _AmbientIntensity;
-            float _Distortion;
-            float _Power;
-            float _Scale;
+            float _K;
+            float _P;
 
 			struct vertexInput
 			{
@@ -134,7 +73,10 @@ Shader "Custom/DiffuseHighlights"
 				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 
 				// get dot product between surface normal and light direction
-				float lightDot = saturate(dot(input.normal, lightDir));
+				float lightDot = dot(input.normal, lightDir);
+                // do some math to make lighting falloff smooth
+                lightDot = exp(-pow(_K*(1 - lightDot), _P));
+
                 // lerp lighting between light & dark value
                 float3 light = lerp(_DarkColor, _BrightColor, lightDot);
 
@@ -142,21 +84,13 @@ Shader "Custom/DiffuseHighlights"
 				float4 albedo = tex2D(_MainTex, input.texCoord.xy);
 
                 // shadow value
-                float attenuation = LIGHT_ATTENUATION(input); 
+                //float attenuation = LIGHT_ATTENUATION(input); 
 
-                // composite all lighting together
-                float3 lighting = light * attenuation;
-                // add in ambient lighting
-                lighting += ShadeSH9(half4(input.normal,1)) * _AmbientIntensity;
+				// ambient light
+				//albedo += ShadeSH9(half4(input.normal, 1));
                 
                 // multiply albedo and lighting
-				float3 rgb = albedo.rgb * lighting;
-
-                // translucency
-                float3 h = normalize(lightDir + input.normal * _Distortion);
-                float i = pow(saturate(dot(input.viewDir, h)), _Power) * _Scale;
-                rgb += albedo * i;
-
+				float3 rgb = albedo.rgb * light;
 				return float4(rgb, 1.0);
 			}
 
