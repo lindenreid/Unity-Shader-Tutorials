@@ -65,11 +65,11 @@ Material:
     - _GlossyReflections: 1
     - _HighlightExtrusion: 0
     - _HighlightScale: 0
-    - _K: 2.6
+    - _K: 2
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _P: 1.35
+    - _P: 1.3
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

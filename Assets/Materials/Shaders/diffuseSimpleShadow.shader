@@ -75,7 +75,7 @@ Shader "Custom/SimpleDiffuseShadow"
                 lightDot = exp(-pow(_K*(1 - lightDot), _P));
 
                 // lerp lighting between light & dark value
-                float3 light = lerp(_DarkColor, _BrightColor, lightDot);
+                //float3 light = lerp(_DarkColor, _BrightColor, lightDot);
 
 				// sample texture for color
 				float4 albedo = tex2D(_MainTex, input.texCoord.xy);
@@ -84,10 +84,11 @@ Shader "Custom/SimpleDiffuseShadow"
                 //float attenuation = LIGHT_ATTENUATION(input); 
 
                 // composite all lighting together
-                float3 lighting = light;
+                //float3 lighting = light;
                 
                 // multiply albedo and lighting
-				float3 rgb = albedo.rgb * lighting;
+				float3 rgb = albedo.rgb * lightDot;
+				//rgb += ShadeSH9(half4(input.normal,1));
 				return float4(rgb, 1.0);
 			}
 

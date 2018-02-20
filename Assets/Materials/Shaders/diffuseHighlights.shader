@@ -94,7 +94,6 @@ Shader "Custom/DiffuseHighlights"
 			float4 _LightColor0; // provided by Unity
             float4 _BrightColor;
             float4 _DarkColor;
-            float _AmbientIntensity;
             float _K;
             float _P;
 
