@@ -147,11 +147,11 @@ Shader "Custom/DiffuseHighlights"
                 // shadow value
                 //float attenuation = LIGHT_ATTENUATION(input); 
 
-                // composite all lighting together
-                float3 lighting = light;
+				// ambient light
+				//albedo += ShadeSH9(half4(input.normal, 1));
                 
                 // multiply albedo and lighting
-				float3 rgb = albedo.rgb * lighting;
+				float3 rgb = albedo.rgb * light;
 				return float4(rgb, 1.0);
 			}
 
