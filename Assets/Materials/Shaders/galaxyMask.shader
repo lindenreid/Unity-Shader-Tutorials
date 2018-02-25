@@ -32,8 +32,6 @@ Shader "Custom/GalaxyMask"
 			sampler2D _MainTex;
             sampler2D _MaskTex;
             sampler2D _MaskReplace;
-            // (1/pixelHidth, 1/pixelHeight, width, height)
-            float4 _MaskReplace_TexelSize;
             float4 _MaskScale;
 			float4 _MaskColor;
             float4 _MainColor;
@@ -79,7 +77,7 @@ Shader "Custom/GalaxyMask"
 				float4 albedo = tex2D(_MainTex, input.texCoord.xy);
 
                 // mask
-                float isMask = tex2D(_MaskTex, input.texCoord.xy) == _MaskColor;
+                float isMask = tex2D(_MaskTex, input.texCoord.xy); // == _MaskColor;
 
                 // screen-space coordinates
                 float2 screenPos = ComputeScreenPos(input.pos).xy / _ScreenParams.xy;
