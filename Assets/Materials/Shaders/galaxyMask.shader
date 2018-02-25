@@ -8,7 +8,7 @@ Shader "Custom/GalaxyMask"
         _MaskReplace("Mask Replace Texture", 2D) = "white" {}
         _MaskColor("Mask Color", Color) = (1,1,1,1)
         _MaskScale("Mask Scale", vector) = (1,1,1,1)
-        _Speed("Mask Texture Offset Speed", float) = 1.0
+        _Speed("Mask Texture Speed", float) = 1.0
 	}
 
 	SubShader
@@ -73,26 +73,27 @@ Shader "Custom/GalaxyMask"
 				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 				float lightDot = saturate(dot(input.normal, lightDir));
                 float3 lighting = lightDot * _LightColor0.rgb;
-                lighting += ShadeSH9(half4(input.normal,1));
+                lighting += ShadeSH9(half4(input.normal,1)); // ambient lighting
 
                 // albedo
 				float4 albedo = tex2D(_MainTex, input.texCoord.xy);
 
                 // mask
-                float isMask = tex2D(_MaskTex, input.texCoord.xy); //== _MaskColor;
+                float isMask = tex2D(_MaskTex, input.texCoord.xy) == _MaskColor;
 
                 // screen-space coordinates
                 float4 screenPos = ComputeScreenPos(input.pos);
                 // convert to texture-space coordinates
-                screenPos.xy = screenPos.xy;
-                float2 maskPos = screenPos.xy * _MaskScale.xy;
-                maskPos = maskPos * _MaskReplace_TexelSize.xy;
+                float2 maskPos = screenPos.xy * _MaskReplace_TexelSize.xy * _MaskScale.xy;
+				// scroll sample position
                 maskPos += _Time * _Speed;
 
+                // sample galaxy texture
                 float4 mask = tex2D(_MaskReplace, maskPos);
-                albedo = (1-isMask)*(albedo+_MainColor) + isMask*mask;
 
+                albedo = (1-isMask)*(albedo+_MainColor) + isMask*mask;
                 lighting = (1-isMask)*lighting + isMask*float4(1,1,1,1);
+				
 
                 // final
 				float3 rgb = albedo.rgb * lighting;
