@@ -93,4 +93,4 @@ Material:
     - _MainColor: {r: 0, g: 0, b: 0, a: 1}
     - _MaskColor: {r: 1, g: 0, b: 0, a: 1}
     - _MaskReplace: {r: 1, g: 1, b: 1, a: 1}
-    - _MaskScale: {r: 5, g: 5, b: 1, a: 1}
+    - _MaskScale: {r: 2, g: 2, b: 1, a: 1}

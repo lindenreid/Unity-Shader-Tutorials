@@ -82,9 +82,9 @@ Shader "Custom/GalaxyMask"
                 float isMask = tex2D(_MaskTex, input.texCoord.xy) == _MaskColor;
 
                 // screen-space coordinates
-                float4 screenPos = ComputeScreenPos(input.pos);
+                float2 screenPos = ComputeScreenPos(input.pos).xy / _ScreenParams.xy;
                 // convert to texture-space coordinates
-                float2 maskPos = screenPos.xy * _MaskReplace_TexelSize.xy * _MaskScale.xy;
+                float2 maskPos = screenPos * _MaskScale;
 				// scroll sample position
                 maskPos += _Time * _Speed;
 
