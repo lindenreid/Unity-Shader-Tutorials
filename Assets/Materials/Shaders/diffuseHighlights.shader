@@ -24,9 +24,7 @@ Shader "Custom/DiffuseHighlights"
 
 			// Properties
 			uniform float4 _HighlightColor;
-			uniform float _HighlightExtrusion;
             uniform float _HighlightScale;
-			sampler2D _MainTex;
 
 			struct vertexInput
 			{
@@ -47,13 +45,13 @@ Shader "Custom/DiffuseHighlights"
 
 				float4 newPos = input.vertex;
 
-				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 				float4 normal4 = float4(input.normal, 0.0);
 				float3 normal = normalize(mul(normal4, unity_WorldToObject).xyz);
+				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 
                 float lightDot = saturate(dot(normal, lightDir));
 				newPos += float4(input.normal, 0.0) * lightDot * _HighlightScale;
-
+				
 				output.pos = UnityObjectToClipPos(newPos);
 
 				return output;
@@ -123,25 +121,15 @@ Shader "Custom/DiffuseHighlights"
 
 			float4 frag(vertexOutput input) : COLOR
 			{
-				// _WorldSpaceLightPos0 provided by Unity
 				float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
 
-				// get dot product between surface normal and light direction
 				float lightDot = clamp(dot(input.normal, lightDir), -1, 1);
-                // do some math to make lighting falloff smooth
                 lightDot = exp(-pow(_K*(1 - lightDot), _P));
-
-                // lerp lighting between light & dark value
                 float3 light = lerp(_DarkColor, _BrightColor, lightDot);
 
-				// sample texture for color
 				float4 albedo = tex2D(_MainTex, input.texCoord.xy);
 
-                // shadow value
                 float attenuation = LIGHT_ATTENUATION(input); 
-
-				// ambient light
-				//albedo += ShadeSH9(half4(input.normal, 1));
                 
                 // multiply albedo and lighting
 				float3 rgb = albedo.rgb * light * attenuation;
