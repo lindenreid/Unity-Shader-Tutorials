@@ -11,7 +11,6 @@
 		_NoiseTex("Noise Texture", 2D) = "white" {}
 		_MainTex("Main Texture", 2D) = "white" {}
 		_DistortStrength("Distort Strength", float) = 1.0
-		_ExtraHeight("Extra Height", float) = 0.0
 	}
 
 	SubShader
@@ -30,7 +29,8 @@
         // Background distortion
         Pass
         {
-
+            ZWrite Off
+	    
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -128,7 +128,7 @@
 
 				// apply wave animation
 				float noiseSample = tex2Dlod(_NoiseTex, float4(input.texCoord.xy, 0, 0));
-				output.pos.y += sin(_Time*_WaveSpeed*noiseSample)*_WaveAmp + _ExtraHeight;
+				output.pos.y += sin(_Time*_WaveSpeed*noiseSample)*_WaveAmp;
 				output.pos.x += cos(_Time*_WaveSpeed*noiseSample)*_WaveAmp;
 
 				// compute depth
